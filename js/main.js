@@ -17,19 +17,17 @@ const inputAmount = document.querySelector('#amount').value;
 const inputValue = document.querySelector('#value').value;
 
 // Values * Amount
-function getTotal(products) {
+const getTotal = (products) => {
 	let total = 0;
 
-	for(let i in products) {
+	for(var i in products) {
 		total += products[i].value * products[i].amount;
-		// console.log(
-		//   `Name: ${products[i].name} | Value: ${products[i].value} * ${products[i].amount}` );
 	}
 	return total;
 }
 
 // Create linhas da tabela com as propriedades do produto
-function createList(products) {
+const createList = (products) => {
 
 	let list = 
 		`<thead class="thead-dark">
@@ -44,7 +42,7 @@ function createList(products) {
 			<tbody>`;
 	
 	for(var i in products) {
-	
+
 		list += `
 			<tr>
 				<th scope="row">${ (i*1+1) }</th>
@@ -52,7 +50,7 @@ function createList(products) {
 				<td>${ products[i].amount }</td>
 				<td>${ formatFloat(products[i].value) }</td>
 				<td>
-					<button onclick="editData(${ i });" class="btn btn-dark">Edit</button>
+					<button onclick="setUpdate(${ i });" class="btn btn-dark">Edit</button>
 					<button onclick="deleteData(${ i });" class="btn btn-dark">Delete</button>
 				</td>
 			</tr>`;
@@ -64,21 +62,21 @@ function createList(products) {
 }
 
 // Adiciona lista na tabela
-function insertList( tableID, list ) {
+const insertList = ( tableID, list ) => {
 
 	document.getElementById(tableID).innerHTML = list;
 
 	return;
 }
 
-function formatUppercase(value) {
+const formatUppercase = (value) => {
 
 	let str = value.toLowerCase();
 	str = str.charAt(0).toUpperCase() + str.slice(1) + '';
 	return str;
 }
 
-function formatFloat(value) {
+const formatFloat = (value) => {
 	let float = parseFloat(value).toFixed(2) + '';
 	float.replace('.', ',');
 	float = `R$ ${ float }`;
@@ -86,7 +84,7 @@ function formatFloat(value) {
 	return float;
 }
 
-function addData(evt) {
+const addData = (evt) => {
 
 	products.unshift({
 		'name': inputName.value,
@@ -100,11 +98,13 @@ function addData(evt) {
 	insertList('table-list', list);
 }
 
-function setUpdate(id) {
+const setUpdate = (id) => {
 	let obj = list[id];
-	inputName.value = obj.name;
-	inputAmount.value = obj.amount;
-	inputValue.value = obj.value;
+
+	console.log(obj);
+	// inputName.value = obj.name;
+	// inputAmount.value = obj.amount;
+	// inputValue.value = obj.value;
 }
 
 let list = createList(products);
