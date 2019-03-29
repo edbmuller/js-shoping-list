@@ -34,12 +34,13 @@
 						<div class="col mr-2">
 							<input id="value" type="text" class="form-control" placeholder="Value">
 						</div>
-						<div id="btnUpdate" class="mr-2" style="display: none;">
-							<button onclick="updateData();" class="btn btn-dark">Save</button>
-							<button onclick="resetForm();" class="btn btn-dark">Cancel</button>
+						<div id="btns-update" class="col mr-2" style="display: none;">
+							<input id="id-update" type="hidden">
+							<button onclick="updateData();" type="button" class="btn btn-dark">Save</button>
+							<button onclick="resetForm();" type="button" class="btn btn-dark">Cancel</button>
 						</div>
-						<div class="col mr-2">
-							<button id="btn-add" type="button" class="btn btn-dark" onclick="addData()">Add</button>
+						<div id="btn-add" class="col mr-2">
+							<button class="btn btn-dark" type="button" onclick="addData()">Add</button>
 						</div>
 					</form>
 				</div>		

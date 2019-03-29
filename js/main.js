@@ -11,10 +11,14 @@ const products = [
 	{'name': 'bEer', 'amount': '12', 'value': '3.99'},
 	{'name': 'meat', 'amount': '1', 'value': '15.00'}
 ];
-
-const inputName = document.querySelector('#name').value;
-const inputAmount = document.querySelector('#amount').value;
-const inputValue = document.querySelector('#value').value;
+ 
+const $tableProducts = document.querySelector('#table-list');
+const $inputName = document.querySelector('#name');
+const $inputAmount = document.querySelector('#amount');
+const $inputValue = document.querySelector('#value');
+const $btnsUpdate = document.querySelector('#btns-update');
+const $btnAdd = document.querySelector('#btn-add');
+const $idUpdate = document.querySelector('#id-update');
 
 // Values * Amount
 const getTotal = (products) => {
@@ -28,7 +32,6 @@ const getTotal = (products) => {
 
 // Create linhas da tabela com as propriedades do produto
 const createList = (products) => {
-
 	let list = 
 		`<thead class="thead-dark">
 			<tr>
@@ -58,21 +61,21 @@ const createList = (products) => {
 
 	list += `</tbody>`;
 
+	insertList(list);
 	return list;
 }
 
 // Adiciona lista na tabela
-const insertList = ( tableID, list ) => {
-
-	document.getElementById(tableID).innerHTML = list;
+const insertList = (list) => {
+	$tableProducts.innerHTML = list;
 
 	return;
 }
 
 const formatUppercase = (value) => {
-
 	let str = value.toLowerCase();
 	str = str.charAt(0).toUpperCase() + str.slice(1) + '';
+
 	return str;
 }
 
@@ -84,30 +87,78 @@ const formatFloat = (value) => {
 	return float;
 }
 
-const addData = (evt) => {
-
+const addData = () => {
 	products.unshift({
-		'name': inputName.value,
-		'amount': inputAmount.value,
-		'value': inputValue.value
+		'name': $inputName.value,
+		'amount': $inputAmount.value,
+		'value': $inputValue.value
 	});
 
-
-	let list = createList(products);
-
-	insertList('table-list', list);
+	createList(products);
 }
 
 const setUpdate = (id) => {
-	let obj = list[id];
+	let list = products[id];
 
-	console.log(obj);
-	// inputName.value = obj.name;
-	// inputAmount.value = obj.amount;
-	// inputValue.value = obj.value;
+	$inputName.value = list.name;
+	$inputAmount.value = list.amount;
+	$inputValue.value = list.value;
+
+	$btnsUpdate.style.display = "inline-block";
+	$btnAdd.style.display = "none";
+	$idUpdate.value = id;
 }
 
-let list = createList(products);
+const resetForm = () => {
 
-insertList('table-list', list);
+	$inputName.value = "";
+	$inputAmount.value = "";
+	$inputValue.value = "";
+
+	$btnsUpdate.style.display = "none";
+	$btnAdd.style.display = "inline-block";
+	$idUpdate.value = "";
+}
+
+const updateData = () => {
+	let id = $idUpdate.value;
+
+	products[id] = {
+		'name': $inputName.value,
+		'amount': $inputAmount.value,
+		'value': $inputValue.value
+	}
+
+	$btnsUpdate.style.display = "none";
+	$btnAdd.style.display = "inline-block";
+	$idUpdate.value = "";
+
+	createList(products);
+	resetForm();
+}
+
+const deleteData = (id) => {
+	
+	if ( confirm("Delete this item?") ) {
+		if ( id === products.length - 1 ) {
+			products.pop();
+		} else if ( id === 0 ) {
+			products.shift();
+	} else {
+		let arrAuxIni = products.slice(0, id);
+		let arrAuxEnd = products.slice(id + 1);
+
+		list = arrAuxIni.concat(arrAuxEnd);
+		console.log(products);
+		products.slice();
+		console.log(products);
+		products.concat(list);
+	}
+	
+		createList(products);
+	}
+}
+
+createList(products);
+
 
