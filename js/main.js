@@ -1,103 +1,113 @@
 /*
-    O usuário poderá adicionar products a uma lista com as seguintes categorias:
-    Nome, Quantidade, Valor
+		O usuário poderá adicionar products a uma lista com as seguintes categorias:
+		Name, Amount, Value
 
-    Por fim o app irá calcular o valor unitário de cada produto * quantidade + outros products * quantidade. 
+		Por fim o app irá calcular o Value unitário de cada produto * Amount + outros products * Amount. 
 */
 
 // Arrey com objeto de products
 const products = [
-  {'name': 'rice', 'amount': '1', 'value': '5.40'},
-  {'name': 'bEer', 'amount': '12', 'value': '3.99'},
-  {'name': 'meat', 'amount': '1', 'value': '15.00'}
+	{'name': 'rice', 'amount': '1', 'value': '5.40'},
+	{'name': 'bEer', 'amount': '12', 'value': '3.99'},
+	{'name': 'meat', 'amount': '1', 'value': '15.00'}
 ];
 
-// Todos valores * a quantidade
-function getTotal(products) {
-  var total = 0;
+const inputName = document.querySelector('#name').value;
+const inputAmount = document.querySelector('#amount').value;
+const inputValue = document.querySelector('#value').value;
 
-  for(var i in products) {
-    total += products[i].value * products[i].amount;
-    // console.log(
-    //   `Nome: ${products[i].name} | Valor: ${products[i].value} * ${products[i].amount}` );
-  }
-  return total;
+// Values * Amount
+function getTotal(products) {
+	let total = 0;
+
+	for(let i in products) {
+		total += products[i].value * products[i].amount;
+		// console.log(
+		//   `Name: ${products[i].name} | Value: ${products[i].value} * ${products[i].amount}` );
+	}
+	return total;
 }
 
 // Create linhas da tabela com as propriedades do produto
 function createList(products) {
 
-  var list = `
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nome</th>
-        <th scope="col">Quantidade</th>
-        <th scope="col">Valor</th>
-        <th scope="col">Ação</th>
-      </tr>
-    </thead>
-      <tbody>`;
-  
-  for(var i in products) {
-    list += `
-    <tr>
-    <th scope="row">${ (i*1+1) }</th>
-    <td>${ formatUppercase(products[i].name) }</td>
-    <td>${ products[i].amount }</td>
-    <td>${ formatFloat(products[i].value) }</td>
-    <td>Editar | Deletar</td>
-  </tr>`;
-  }
+	let list = 
+		`<thead class="thead-dark">
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Amount</th>
+				<th scope="col">Value</th>
+				<th scope="col">Ação</th>
+			</tr>
+		</thead>
+			<tbody>`;
+	
+	for(var i in products) {
+	
+		list += `
+			<tr>
+				<th scope="row">${ (i*1+1) }</th>
+				<td>${ formatUppercase(products[i].name) }</td>
+				<td>${ products[i].amount }</td>
+				<td>${ formatFloat(products[i].value) }</td>
+				<td>
+					<button onclick="editData(${ i });" class="btn btn-dark">Edit</button>
+					<button onclick="deleteData(${ i });" class="btn btn-dark">Delete</button>
+				</td>
+			</tr>`;
+	}
 
-  list += `</tbody>`;
+	list += `</tbody>`;
 
-  return list;
+	return list;
 }
 
 // Adiciona lista na tabela
 function insertList( tableID, list ) {
 
-  document.getElementById(tableID).innerHTML = list;
+	document.getElementById(tableID).innerHTML = list;
 
-  return;
+	return;
 }
 
 function formatUppercase(value) {
 
-  var str = value.toLowerCase();
-  str = str.charAt(0).toUpperCase() + str.slice(1) + '';
-  return str;
+	let str = value.toLowerCase();
+	str = str.charAt(0).toUpperCase() + str.slice(1) + '';
+	return str;
 }
 
 function formatFloat(value) {
-  var float = parseFloat(value).toFixed(2) + '';
-  float.replace('.', ',');
-  float = `R$ ${ float }`;
+	let float = parseFloat(value).toFixed(2) + '';
+	float.replace('.', ',');
+	float = `R$ ${ float }`;
 
-  return float;
+	return float;
 }
 
-function addData() {
+function addData(evt) {
 
-  var inputName = document.querySelector('#name').value;
-  var inputAmount = document.querySelector('#amount').value;
-  var inputValue = document.querySelector('#value').value;
+	products.unshift({
+		'name': inputName.value,
+		'amount': inputAmount.value,
+		'value': inputValue.value
+	});
 
-  var produto = [];
-  produto.unshift({
-    'nome': inputName,
-    'amount': inputAmount,
-    'value': inputValue
-  });
 
-  insertList('table-list', list);
+	let list = createList(products);
+
+	insertList('table-list', list);
 }
 
+function setUpdate(id) {
+	let obj = list[id];
+	inputName.value = obj.name;
+	inputAmount.value = obj.amount;
+	inputValue.value = obj.value;
+}
 
-formatFloat(products[1].valor);
-list = createList(products);
+let list = createList(products);
+
 insertList('table-list', list);
 
-console.log(document.getElementById('add'));
-document.getElementById('add').addEventListener( 'click', addData() );
