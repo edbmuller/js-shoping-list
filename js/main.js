@@ -65,12 +65,14 @@ const createList = (products) => {
 	return list;
 }
 
+
 // Adiciona lista na tabela
 const insertList = (list) => {
 	$tableProducts.innerHTML = list;
 
 	return;
 }
+
 
 const formatUppercase = (value) => {
 	let str = value.toLowerCase();
@@ -79,6 +81,7 @@ const formatUppercase = (value) => {
 	return str;
 }
 
+
 const formatFloat = (value) => {
 	let float = parseFloat(value).toFixed(2) + '';
 	float.replace('.', ',');
@@ -86,6 +89,7 @@ const formatFloat = (value) => {
 
 	return float;
 }
+
 
 const addData = () => {
 	products.unshift({
@@ -96,6 +100,7 @@ const addData = () => {
 
 	createList(products);
 }
+
 
 const setUpdate = (id) => {
 	let list = products[id];
@@ -109,8 +114,8 @@ const setUpdate = (id) => {
 	$idUpdate.value = id;
 }
 
-const resetForm = () => {
 
+const resetForm = () => {
 	$inputName.value = "";
 	$inputAmount.value = "";
 	$inputValue.value = "";
@@ -119,6 +124,7 @@ const resetForm = () => {
 	$btnAdd.style.display = "inline-block";
 	$idUpdate.value = "";
 }
+
 
 const updateData = () => {
 	let id = $idUpdate.value;
@@ -137,22 +143,16 @@ const updateData = () => {
 	resetForm();
 }
 
+
 const deleteData = (id) => {
-	
+
 	if ( confirm("Delete this item?") ) {
 		if ( id === products.length - 1 ) {
 			products.pop();
 		} else if ( id === 0 ) {
 			products.shift();
 	} else {
-		let arrAuxIni = products.slice(0, id);
-		let arrAuxEnd = products.slice(id + 1);
-
-		list = arrAuxIni.concat(arrAuxEnd);
-		console.log(products);
-		products.slice();
-		console.log(products);
-		products.concat(list);
+		products.splice(id, 1);
 	}
 	
 		createList(products);
