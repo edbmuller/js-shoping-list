@@ -19,19 +19,23 @@ const $inputValue = document.querySelector('#value');
 const $btnsUpdate = document.querySelector('#btns-update');
 const $btnAdd = document.querySelector('#btn-add');
 const $idUpdate = document.querySelector('#id-update');
+const $alert = document.querySelector('.alert');
+const $total = document.querySelector('#total-value');
+
 
 // Values * Amount
-const getTotal = (products) => {
+const getTotal = products => {
 	let total = 0;
 
 	for(var i in products) {
 		total += products[i].value * products[i].amount;
 	}
-	return total;
+
+	$total.innerHTML = formatValue(total);
 }
 
 // Create linhas da tabela com as propriedades do produto
-const createList = (products) => {
+const createList = products => {
 	let list = 
 		`<thead class="thead-dark">
 			<tr>
@@ -50,7 +54,7 @@ const createList = (products) => {
 			<tr>
 				<th scope="row">${ (i*1+1) }</th>
 				<td>${ formatUppercase(products[i].name) }</td>
-				<td>${ products[i].amount }</td>
+				<td>${ formatInt(products[i].amount) }</td>
 				<td>${ formatFloat(products[i].value) }</td>
 				<td>
 					<button onclick="setUpdate(${ i });" class="btn btn-dark">Edit</button>
@@ -61,20 +65,22 @@ const createList = (products) => {
 
 	list += `</tbody>`;
 
+	getTotal(products);
+	$alert.style.display = 'none';
 	insertList(list);
 	return list;
 }
 
 
 // Adiciona lista na tabela
-const insertList = (list) => {
+const insertList = list => {
 	$tableProducts.innerHTML = list;
 
 	return;
 }
 
 
-const formatUppercase = (value) => {
+const formatUppercase = value => {
 	let str = value.toLowerCase();
 	str = str.charAt(0).toUpperCase() + str.slice(1) + '';
 
@@ -82,7 +88,10 @@ const formatUppercase = (value) => {
 }
 
 
-const formatFloat = (value) => {
+const formatInt = value => parseInt(value);
+
+
+const formatFloat = value => {
 	let float = parseFloat(value).toFixed(2) + '';
 	float.replace('.', ',');
 	float = `R$ ${ float }`;
@@ -92,17 +101,24 @@ const formatFloat = (value) => {
 
 
 const addData = () => {
+	
+	if ( !validation() ) {
+		return;
+	}
+
 	products.unshift({
 		'name': $inputName.value,
 		'amount': $inputAmount.value,
 		'value': $inputValue.value
 	});
 
+	validation();
+
 	createList(products);
 }
 
 
-const setUpdate = (id) => {
+const setUpdate = id => {
 	let list = products[id];
 
 	$inputName.value = list.name;
@@ -116,17 +132,21 @@ const setUpdate = (id) => {
 
 
 const resetForm = () => {
-	$inputName.value = "";
-	$inputAmount.value = "";
-	$inputValue.value = "";
+	$inputName.value = '';
+	$inputAmount.value = '';
+	$inputValue.value = '';
 
 	$btnsUpdate.style.display = "none";
 	$btnAdd.style.display = "inline-block";
-	$idUpdate.value = "";
+	$idUpdate.value = '';
 }
 
 
 const updateData = () => {
+	if ( !validation() ) {
+		return;
+	}
+
 	let id = $idUpdate.value;
 
 	products[id] = {
@@ -137,14 +157,14 @@ const updateData = () => {
 
 	$btnsUpdate.style.display = "none";
 	$btnAdd.style.display = "inline-block";
-	$idUpdate.value = "";
+	$idUpdate.value = '';
 
 	createList(products);
 	resetForm();
 }
 
 
-const deleteData = (id) => {
+const deleteData = id => {
 
 	if ( confirm("Delete this item?") ) {
 		if ( id === products.length - 1 ) {
@@ -156,6 +176,32 @@ const deleteData = (id) => {
 	}
 	
 		createList(products);
+	}
+}
+
+const validation = () => {
+
+	let name = $inputName.value;
+	let amount = $inputAmount.value;
+	let value = $inputValue.value;
+	let errors = '';
+
+	if ( name === '' ) {
+		errors += '<p>Fill out description</p>';
+	} 
+	if ( amount === '' || amount != parseInt(amount) ) {
+		errors += '<p>Fill out a valid quantity</p>';
+	}
+	if ( value === '' || value != parseFloat(value) ) {
+		errors += '<p class="mb-0">Fill out a valid Value</p>';
+	}
+	if ( errors != '' ) {
+		errors = '<h4>Errors</h4>' + errors;
+		$alert.style.display = 'block';
+		$alert.innerHTML =errors;
+		return 0;
+	} else {
+		return 1;
 	}
 }
 

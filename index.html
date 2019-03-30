@@ -43,6 +43,8 @@
 							<button class="btn btn-dark" type="button" onclick="addData()">Add</button>
 						</div>
 					</form>
+					<div class="alert alert-dark mt-4" role="alert" style="display: none;">
+					</div>
 				</div>		
 		</div>
 	</div>
@@ -51,6 +53,12 @@
 		<table id="table-list" class="table">
 		</table>
 	</div>
+
+	<nav class="navbar fixed-bottom navbar-light bg-dark">
+		<div class="container-fluid">
+			<h4 class="text-center text-white mb-0">Total: <span id="total-value">R$ 0,00</span></h4>
+		</div>
+	</nav>
 
 	<script src="js/config.js"></script>
 	<script src="js/main.js"></script>
