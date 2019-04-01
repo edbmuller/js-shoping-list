@@ -39,7 +39,7 @@ const createList = products => {
 	let table = 
 		`<thead class="thead-dark">
 			<tr>
-				<th scope="col">#</th>
+				<th scope="col" style="padding-right: 0;">#</th>
 				<th scope="col">Name</th>
 				<th scope="col">Amount</th>
 				<th scope="col">Value</th>
@@ -52,13 +52,17 @@ const createList = products => {
 
 		table += `
 			<tr>
-				<th scope="row">${ (i*1+1) }</th>
+				<th scope="row" class="pr-0">${ (i*1+1) }</th>
 				<td>${ formatUppercase(products[i].name) }</td>
-				<td>${ formatInt(products[i].amount) }</td>
+				<td class="text-center">${ formatInt(products[i].amount) }</td>
 				<td>${ formatFloat(products[i].value) }</td>
 				<td>
-					<button onclick="setUpdate(${ i });" class="btn btn-dark">Edit</button>
-					<button onclick="deleteData(${ i });" class="btn btn-dark">Delete</button>
+					<button onclick="setUpdate(${ i });" class="btn btn-dark px-2 py-1">
+						<img src="img/edit.png" width="18" height="18" alt="Edit Line" title="Edit Line">
+					</button>
+					<button onclick="deleteData(${ i });" class="btn btn-dark px-2 py-1">
+						<img src="img/delete_outline.png" width="18" height="18" alt="Delete Line" title="Delete Line">
+					</button>
 				</td>
 			</tr>`;
 	}
