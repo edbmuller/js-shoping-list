@@ -5,8 +5,8 @@
 		Por fim o app irá calcular o Value unitário de cada produto * Amount + outros products * Amount. 
 */
 
-// Arrey com objeto de products
-const products = [
+// Array com objeto de products
+let products = [
 	{'name': 'rice', 'amount': '1', 'value': '5.40'},
 	{'name': 'bEer', 'amount': '12', 'value': '3.99'},
 	{'name': 'meat', 'amount': '1', 'value': '15.00'}
@@ -25,18 +25,18 @@ const $total = document.querySelector('#total-value');
 
 // Values * Amount
 const getTotal = products => {
-	let total = 0;
+	var total = 0;
 
 	for(var i in products) {
 		total += products[i].value * products[i].amount;
 	}
 
-	$total.innerHTML = formatValue(total);
+	$total.innerHTML = formatFloat(total);
 }
 
 // Create linhas da tabela com as propriedades do produto
 const createList = products => {
-	let list = 
+	let table = 
 		`<thead class="thead-dark">
 			<tr>
 				<th scope="col">#</th>
@@ -50,7 +50,7 @@ const createList = products => {
 	
 	for(var i in products) {
 
-		list += `
+		table += `
 			<tr>
 				<th scope="row">${ (i*1+1) }</th>
 				<td>${ formatUppercase(products[i].name) }</td>
@@ -63,12 +63,13 @@ const createList = products => {
 			</tr>`;
 	}
 
-	list += `</tbody>`;
+	table += `</tbody>`;
 
 	getTotal(products);
 	$alert.style.display = 'none';
-	insertList(list);
-	return list;
+	saveListStorage(products);
+	insertList(table);
+	return;
 }
 
 
@@ -113,6 +114,7 @@ const addData = () => {
 	});
 
 	validation();
+	resetForm();
 
 	createList(products);
 }
@@ -205,6 +207,31 @@ const validation = () => {
 	}
 }
 
-createList(products);
+const deleteList = list => {
+	if( confirm("Delete this list?") ) {
+		products.length = 0;
+		createList(products);
+	}
+	return;
+}
+
+const saveListStorage = list => {
+	let jsonStr = JSON.stringify(list);
+	localStorage.setItem('list', jsonStr);
+	return;
+}
+
+const initListStorage = () => {
+	let testList = localStorage.getItem('list');
+
+	if ( testList ) {
+		products = JSON.parse(testList);
+	}
+
+	createList(products);
+}
+
+
+initListStorage();
 
 
